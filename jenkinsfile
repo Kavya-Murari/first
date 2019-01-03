@@ -1,0 +1,21 @@
+pipeline{
+	agent any
+	stages{
+		stage('clone'){
+			steps{
+				checkout SCM
+			}
+		}
+		stage('build'){
+			steps{
+				sh '/home/jenkins/apache-maven-3.6.0/bin/mvn install'
+			}
+		}
+		stage(''){
+			steps{
+				sshpass -p "qa" scp /target/gamutkart.war qa@172.17.0.3:/home/qa/apache-tomcat-8.5.35/webapps
+				sshpass -p "qa" ssh qa@172.17.0.3 "JAVA_HOME=/home/qa/jdk1.8.0_191" /home/qa/apache-tomcat-8.5.35/bin/startup.sh
+			}
+		}
+	}
+}
