@@ -1,21 +1,21 @@
 pipeline{
 	agent any
-	stages{
-		stage('clone'){
-			steps{
-				checkout SCM
-			}
-		}
-		stage('build'){
-			steps{
+
+	stages {
+	    stage('Checkout') {
+	        steps {
+				checkout scm			        }
+		    }
+		stage('Build') {
+	        steps {
 				sh '/home/jenkins/apache-maven-3.6.0/bin/mvn install'
+	        }
+		}
+		stage('Deployment') {
+			steps {
+				sh 'echo deployment is succussful!'
 			}
 		}
-		stage(''){
-			steps{
-				sh 'sshpass -p "qa" scp /root/.jenkins/workspace/sample1/target/gamutkart.war qa@172.17.0.3:/home/qa/apache-tomcat-8.5.35/webapps'
-				sh 'sshpass -p "qa" ssh qa@172.17.0.3 "JAVA_HOME=/home/qa/jdk1.8.0_191" /home/qa/apache-tomcat-8.5.35/bin/startup.sh'
-			}
-		}
+
 	}
 }
